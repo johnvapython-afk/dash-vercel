@@ -61,8 +61,8 @@ dash_app.layout = html.Div(
                     html.Button("Run Simulation", id="run-btn", n_clicks=0),
                 ]),
                 html.Div([
-                    html.Label("Download"),
-                    html.Button("Download CSV", id="download-btn", n_clicks=0, disabled=True),
+                     #html.Label("Download"),
+                     html.Button("Download CSV", id="download-btn", n_clicks=0, disabled=True, hidden=True),
                 ]),
             ],
         ),
@@ -104,7 +104,7 @@ def parse_number_list(text: str):
     Output("ci-total", "children"),
     Output("obs-months", "children"),
     Output("sim-data", "data"),         # results DF as JSON
-    Output("sim-meta", "data"),         # inputs & metadata
+    Output("sim-meta", "data"),         # inputs and metadata
     Output("download-btn", "disabled"), # enable after run
     Input("run-btn", "n_clicks"),
     State("claims-input", "value"),
@@ -120,7 +120,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     sims = int(sims or 1000)
     seed = None if seed is None else int(seed)
 
-    # Guardrails & slice
+    # Guardrails and slice
     if len(observed) == 0: observed = [100000.0]
     if len(trends_pct) == 0: trends_pct = [0.0]
     obs_n = min(len(observed), 12)
@@ -185,11 +185,11 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     fig_ts.add_trace(go.Scatter(x=x, y=q50, mode="lines", line=dict(color="#1f77b4", width=3), name="Median"))
     fig_ts.add_trace(go.Scatter(x=x, y=q5, mode="lines", line=dict(color="#1f77b4", width=0), showlegend=False))
     fig_ts.add_trace(go.Scatter(x=x, y=q95, mode="lines", line=dict(color="#1f77b4", width=0),
-                                fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5–95% band"))
+                                fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5_95% band"))
     if obs_n < 12:
         fig_ts.add_vline(x=obs_n - 0.5, line=dict(color="gray", dash="dot"),
                          annotation_text="Forecast begins", annotation_position="top right")
-    fig_ts.update_layout(title="Monthly Claims — Observed & Simulated", xaxis_title="Month",
+    fig_ts.update_layout(title="Monthly Claims _ Observed and Simulated", xaxis_title="Month",
                          yaxis_title="Claims", template="plotly_white",
                          margin=dict(l=40, r=20, t=50, b=40),
                          legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0.5))
@@ -201,11 +201,11 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     fig_ts_acc.add_trace(go.Scatter(x=x, y=q50_acc, mode="lines", line=dict(color="#1f77b4", width=3), name="Median"))
     fig_ts_acc.add_trace(go.Scatter(x=x, y=q5_acc, mode="lines", line=dict(color="#1f77b4", width=0), showlegend=False))
     fig_ts_acc.add_trace(go.Scatter(x=x, y=q95_acc, mode="lines", line=dict(color="#1f77b4", width=0),
-                                    fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5–95% band"))
+                                    fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5_95% band"))
     if obs_n < 12:
         fig_ts_acc.add_vline(x=obs_n - 0.5, line=dict(color="gray", dash="dot"),
                              annotation_text="Forecast begins", annotation_position="top right")
-    fig_ts_acc.update_layout(title="Accumulative Monthly Claims — Observed & Simulated", xaxis_title="Month",
+    fig_ts_acc.update_layout(title="Accumulative Monthly Claims _ Observed and Simulated", xaxis_title="Month",
                              yaxis_title="Claims", template="plotly_white",
                              margin=dict(l=40, r=20, t=50, b=40),
                              legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0.5))
@@ -221,7 +221,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
                            yaxis_title="Count", template="plotly_white",
                            margin=dict(l=40, r=20, t=50, b=40), bargap=0.02)
 
-    # Build exportable DF & metadata
+    # Build exportable DF and metadata
     df_export = pd.DataFrame({"sim_id": np.arange(sims, dtype=int)})
     for i, name in enumerate(MONTHS[:12]):
         df_export[name] = paths[:, i]
@@ -279,8 +279,13 @@ def download_csv(n_clicks, sim_json, meta):
     ]
     buf.write("\n".join(header_lines))
     buf.write("\n\n")
-    df.to_csv(buf, index=False)
+    try:
+        df.to_csv(buf, index=False)
+    except Exception as e:
+        print("CSV write skipped:", e)
+
     return dcc.send_string(buf.getvalue(), "claims_simulation_with_inputs.csv")
+
 
 # WSGI app for Vercel (required)
 app = dash_app.server

@@ -1,4 +1,4 @@
-dash==2.*
+dash==4.1.0
 plotly==5.*
 numpy==1.*
 pandas==2.*
