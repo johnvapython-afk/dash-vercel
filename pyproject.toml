@@ -3,3 +3,6 @@ name = "dash-vercel"
 version = "0.1.0"
 requires-python = ">=3.12"
 
+[tool.vercel.scripts]
+build = "python -m pip install -r requirements.txt"
+
