@@ -22,7 +22,7 @@ dash_app.title = "Claims Projection"
 dash_app.layout = html.Div(
     style={"fontFamily": "Segoe UI, Roboto, Arial", "padding": "16px"},
     children=[
-        html.H2("FY26 Claims Projection _ Random Trend Simulation (Feb2026YTD)"),
+        html.H2("FY26 Claims Projection _ Random Trend Simulation (Feb 2026 YTD)"),
         html.P("Provide observed monthly claims and monthly trend options (% per month)."),
         html.Div(
             style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "12px"},
@@ -38,12 +38,12 @@ dash_app.layout = html.Div(
                     html.Small("Example: 0.5, 1.0, 1.5 (interpreted as +0.5% etc.)"),
                 ]),
                 html.Div([
-                    html.Label("Monthly volatility (?, percent)"),
+                    html.Label("Monthly volatility (x percent)"),
                     dcc.Slider(
                         id="vol-input", min=0.0, max=5.0, step=0.1, value=DEFAULT_VOLATILITY,
                         marks={0: "0%", 1: "1%", 2: "2%", 3: "3%", 4: "4%", 5: "5%"},
                     ),
-                    html.Small("Noise ~ Normal(0, ?). Applied additively to the selected trend."),
+                    html.Small("Noise ~ Normal(0, x). Applied additively to the selected trend."),
                 ]),
                 html.Div([
                     html.Label("Number of simulations"),
@@ -57,7 +57,7 @@ dash_app.layout = html.Div(
                               style={"width": "150px", "display": "none"}),
                 ]),
                 html.Div([
-                    html.Label("Run"),
+                    #html.Label("Run"),
                     html.Button("Run Simulation", id="run-btn", n_clicks=0),
                 ]),
                 html.Div([
@@ -70,10 +70,10 @@ dash_app.layout = html.Div(
         html.Div(
             style={"display": "flex", "gap": "24px", "flexWrap": "wrap"},
             children=[
-                html.Div([html.H4("Mean annual total"), html.Div(id="mean-total", style={"fontSize": "26px"})]),
-                html.Div([html.H4("Median annual total"), html.Div(id="median-total", style={"fontSize": "26px"})]),
-                html.Div([html.H4("5th_95th pct"), html.Div(id="ci-total", style={"fontSize": "26px"})]),
-                html.Div([html.H4("Observed months"), html.Div(id="obs-months", style={"fontSize": "26px"})]),
+                html.Div([html.H4("Mean Annual Total"), html.Div(id="mean-total", style={"fontSize": "26px"})]),
+                html.Div([html.H4("Median Annual Total"), html.Div(id="median-total", style={"fontSize": "26px"})]),
+                html.Div([html.H4("5th_95th Percentile"), html.Div(id="ci-total", style={"fontSize": "26px"})]),
+                html.Div([html.H4("Observed Months"), html.Div(id="obs-months", style={"fontSize": "26px"})]),
             ],
         ),
         dcc.Graph(id="timeseries-graph", style={"height": "48vh"}),
@@ -185,7 +185,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     fig_ts.add_trace(go.Scatter(x=x, y=q50, mode="lines", line=dict(color="#1f77b4", width=3), name="Median"))
     fig_ts.add_trace(go.Scatter(x=x, y=q5, mode="lines", line=dict(color="#1f77b4", width=0), showlegend=False))
     fig_ts.add_trace(go.Scatter(x=x, y=q95, mode="lines", line=dict(color="#1f77b4", width=0),
-                                fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5_95% band"))
+                                fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5_95% Band"))
     if obs_n < 12:
         fig_ts.add_vline(x=obs_n - 0.5, line=dict(color="gray", dash="dot"),
                          annotation_text="Forecast begins", annotation_position="top right")
@@ -201,7 +201,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     fig_ts_acc.add_trace(go.Scatter(x=x, y=q50_acc, mode="lines", line=dict(color="#1f77b4", width=3), name="Median"))
     fig_ts_acc.add_trace(go.Scatter(x=x, y=q5_acc, mode="lines", line=dict(color="#1f77b4", width=0), showlegend=False))
     fig_ts_acc.add_trace(go.Scatter(x=x, y=q95_acc, mode="lines", line=dict(color="#1f77b4", width=0),
-                                    fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5_95% band"))
+                                    fill="tonexty", fillcolor="rgba(31,119,180,0.20)", name="5_95% Band"))
     if obs_n < 12:
         fig_ts_acc.add_vline(x=obs_n - 0.5, line=dict(color="gray", dash="dot"),
                              annotation_text="Forecast begins", annotation_position="top right")
@@ -216,8 +216,8 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     fig_hist.add_vline(x=mean_total, line_color="black", line_dash="dash",
                        annotation_text=f"Mean: {mean_total:,.0f}", annotation_position="top right")
     fig_hist.add_vline(x=median_total, line_color="#d62728", line_dash="dot",
-                       annotation_text=f"Median: {median_total:,.0f}", annotation_position="top right")
-    fig_hist.update_layout(title="Distribution of Annual Totals (Simulated)", xaxis_title="Annual total",
+                       annotation_text=f"Median: {median_total:,.0f}", annotation_position="bottom right")
+    fig_hist.update_layout(title="Distribution of Annual Totals (Simulated)", xaxis_title="Annual Total",
                            yaxis_title="Count", template="plotly_white",
                            margin=dict(l=40, r=20, t=50, b=40), bargap=0.02)
 
