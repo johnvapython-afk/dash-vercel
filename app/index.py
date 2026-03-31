@@ -8,8 +8,9 @@ import dash
 from dash import Dash, html, dcc, Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
+import scipy.stats as scista
 
-DEFAULT_CLAIMS = "2701, 2799, 2626 "
+DEFAULT_CLAIMS = "4135, 3029, 4248, 3741, 4000 "
 DEFAULT_TRENDS = "0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7"
 DEFAULT_VOLATILITY = 5
 DEFAULT_SIMS = 1000
@@ -22,8 +23,8 @@ dash_app.title = "Claims Projection"
 dash_app.layout = html.Div(
     style={"fontFamily": "Segoe UI, Roboto, Arial", "padding": "16px"},
     children=[
-        html.H2("FY26 Claims Projection _ Random Trend Simulation (Feb 2026 YTD)"),
-        html.P("Provide observed monthly claims and monthly trend options (% per month)."),
+        html.H2("FY26 Claims Projection (Random Trend Simulation based on FY 2026 YTD observed claims)"),
+        html.P("Provide observed monthly claims and monthly trend options (% per month)"),
         html.Div(
             style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "12px"},
             children=[
@@ -74,6 +75,7 @@ dash_app.layout = html.Div(
                 html.Div([html.H4("Median Annual Total"), html.Div(id="median-total", style={"fontSize": "26px"})]),
                 html.Div([html.H4("5th_95th Percentile"), html.Div(id="ci-total", style={"fontSize": "26px"})]),
                 html.Div([html.H4("Observed Months"), html.Div(id="obs-months", style={"fontSize": "26px"})]),
+                html.Div([html.H4("$50B Percentile"), html.Div(id="50b-percentile", style={"fontSize": "26px"})]),
             ],
         ),
         dcc.Graph(id="timeseries-graph", style={"height": "48vh"}),
@@ -103,6 +105,7 @@ def parse_number_list(text: str):
     Output("median-total", "children"),
     Output("ci-total", "children"),
     Output("obs-months", "children"),
+    Output("50b-percentile", "children"),
     Output("sim-data", "data"),         # results DF as JSON
     Output("sim-meta", "data"),         # inputs and metadata
     Output("download-btn", "disabled"), # enable after run
@@ -163,6 +166,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     median_total = float(np.median(annual_totals))
     p5 = float(np.percentile(annual_totals, 5))
     p95 = float(np.percentile(annual_totals, 95))
+    pp = float(scista.percentileofscore(annual_totals, 50000))
 
     # Quantiles per month
     q5, q50, q95 = np.percentile(paths, [5, 50, 95], axis=0)
@@ -247,6 +251,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     return (fig_ts_acc, fig_ts, fig_hist,
             f"{mean_total:,.0f}", f"{median_total:,.0f}", f"{p5:,.0f} _ {p95:,.0f}",
             f"{obs_n} month(s)",
+            f"{pp}%",
             export_json, meta, False)
 
 @dash_app.callback(
