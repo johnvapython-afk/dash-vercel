@@ -8,7 +8,7 @@ import dash
 from dash import Dash, html, dcc, Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
-import scipy.stats as scista
+#import scipy.stats as scista
 
 DEFAULT_CLAIMS = "4135, 3029, 4248, 3741, 4000 "
 DEFAULT_TRENDS = "0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7"
@@ -166,7 +166,8 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     median_total = float(np.median(annual_totals))
     p5 = float(np.percentile(annual_totals, 5))
     p95 = float(np.percentile(annual_totals, 95))
-    pp = float(scista.percentileofscore(annual_totals, 50000))
+    #pp = float(scista.percentileofscore(annual_totals, 50000))
+    pp = float(np.sum(np.abs(annual_totals) < 50000) / len(annual_totals) * 100)
 
     # Quantiles per month
     q5, q50, q95 = np.percentile(paths, [5, 50, 95], axis=0)
