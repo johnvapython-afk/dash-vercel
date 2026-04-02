@@ -10,9 +10,9 @@ import plotly.graph_objs as go
 import pandas as pd
 #import scipy.stats as scista
 
-DEFAULT_CLAIMS = "4135, 3029, 4248, 3741, 4000 "
+DEFAULT_CLAIMS = "4135, 3029, 4248, 3741, 3852 "
 DEFAULT_TRENDS = "0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7"
-DEFAULT_VOLATILITY = 5
+DEFAULT_VOLATILITY = 9
 DEFAULT_SIMS = 1000
 DEFAULT_SEED = 42
 MONTHS = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
@@ -41,8 +41,8 @@ dash_app.layout = html.Div(
                 html.Div([
                     html.Label("Monthly volatility (x percent)"),
                     dcc.Slider(
-                        id="vol-input", min=0.0, max=5.0, step=0.1, value=DEFAULT_VOLATILITY,
-                        marks={0: "0%", 1: "1%", 2: "2%", 3: "3%", 4: "4%", 5: "5%"},
+                        id="vol-input", min=0.0, max=15.0, step=0.1, value=DEFAULT_VOLATILITY,
+                        marks={0: "0%", 1: "1%", 2: "2%", 3: "3%", 4: "4%", 5: "5%", 6: "6%", 7: "7%", 8: "8%", 9: "9%", 10: "10%", 11: "11%", 12: "12%", 13: "13%", 14: "14%", 15: "15%"},
                     ),
                     html.Small("Noise ~ Normal(0, x). Applied additively to the selected trend."),
                 ]),
@@ -167,7 +167,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     p5 = float(np.percentile(annual_totals, 5))
     p95 = float(np.percentile(annual_totals, 95))
     #pp = float(scista.percentileofscore(annual_totals, 50000))
-    pp = float(np.sum(np.abs(annual_totals) < 50000) / len(annual_totals) * 100)
+    pp = round(float(np.sum(np.abs(annual_totals) < 50000) / len(annual_totals) * 100),3)
 
     # Quantiles per month
     q5, q50, q95 = np.percentile(paths, [5, 50, 95], axis=0)
@@ -210,7 +210,7 @@ def run_simulation(n_clicks, claims_text, trends_text, vol_pct, sims, seed):
     if obs_n < 12:
         fig_ts_acc.add_vline(x=obs_n - 0.5, line=dict(color="gray", dash="dot"),
                              annotation_text="Forecast begins", annotation_position="top right")
-    fig_ts_acc.update_layout(title="Accumulative Monthly Claims _ Observed and Simulated", xaxis_title="Month",
+    fig_ts_acc.update_layout(title="Cumulative Monthly Claims _ Observed and Simulated", xaxis_title="Month",
                              yaxis_title="Claims", template="plotly_white",
                              margin=dict(l=40, r=20, t=50, b=40),
                              legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0.5))
