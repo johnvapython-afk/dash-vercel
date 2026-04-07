@@ -10,7 +10,7 @@ import plotly.graph_objs as go
 import pandas as pd
 #import scipy.stats as scista
 
-DEFAULT_CLAIMS = "4135, 3029, 4248, 3741, 3852 "
+DEFAULT_CLAIMS = "3940, 3528, 3904, 3944, 3714, 3916"
 DEFAULT_TRENDS = "0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7"
 DEFAULT_VOLATILITY = 9
 DEFAULT_SIMS = 1000
@@ -111,9 +111,9 @@ def parse_number_list(text: str):
 )		
 def update_outputIncPaid(selected_button):		
     if (selected_button=='1'):
-        return "3621, 3246, 3533, 3600, 3610"
+        return "3940, 3528, 3904, 3944, 3714, 3916"
     if (selected_button=='2'):
-        return "3840, 2749, 3955, 3445, 3512"
+        return "3840, 2749, 3955, 3445, 3570, 4023"
 
 
 @dash_app.callback(
