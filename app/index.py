@@ -29,7 +29,16 @@ dash_app.layout = html.Div(
             style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "12px"},
             children=[
                 html.Div([
-                    html.Label("Observed claims (comma-separated)"),
+                    html.Label("Observed claims (comma-separated), you can select default Incurred or Paid claims"),
+                    dcc.RadioItems(
+                        id='radio-items',
+                        options=[
+                            {'label': 'Option 1 Incurred', 'value': '1'},
+                            {'label': 'Option 2 Paid', 'value': '2'},                            
+                        ],
+                        value='1'
+                    ),
+
                     dcc.Input(id="claims-input", type="text", value=DEFAULT_CLAIMS, style={"width": "100%"}),
                     html.Small("Example: 120000, 115000, 130000, 125000"),
                 ]),
@@ -96,6 +105,16 @@ def parse_number_list(text: str):
         except ValueError:
             continue
     return nums
+@dash_app.callback(		
+    Output('claims-input', 'value'),		
+    Input('radio-items', 'value')		
+)		
+def update_outputIncPaid(selected_button):		
+    if (selected_button=='1'):
+        return "3621, 3246, 3533, 3600, 3610"
+    if (selected_button=='2'):
+        return "3840, 2749, 3955, 3445, 3512"
+
 
 @dash_app.callback(
     Output("timeseries-graph_accu", "figure"),
