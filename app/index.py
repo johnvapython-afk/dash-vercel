@@ -24,6 +24,50 @@ dash_app.layout = html.Div(
     style={"fontFamily": "Segoe UI, Roboto, Arial", "padding": "16px"},
     children=[
         html.H2("FY26 Claims Projection (Random Trend Simulation based on FY 2026 YTD observed claims)"),
+        html.Small("Data: Community care paid claims"),
+        html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
+        html.Small("Intended Use: Project future monthly community care claims and fiscal year claims"),
+        html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
+        html.Small("Last update date: May 1, 2026"),
+        html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
+        html.Small("The current frequency of update: Monthly"),
+        html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
+        html.Br(),
+        html.Small("Data dictionary for the raw claims data (the simulation currently does not use raw calims data): "),
+        html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
+        html.A(
+            "data dictionary for CCRS", 
+            href="https://dvagov.sharepoint.com/:x:/r/sites/vacooasmedmal/2026/CCRS%20PROD-Data%20dictionary%202020-07-21.xlsx?d=we6346889a8ac495584f7b08992218b5d&csf=1&web=1&e=JKi5U3\n", 
+            target="_blank",
+            style={"color": "blue", "textDecoration": "underline"}
+           ),
+        html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
+        html.A(
+            "data dictionary for eCAMS", 
+            href="https://dvagov.sharepoint.com/:x:/r/sites/vacooasmedmal/2026/eCAMS_DATA_DICT_V1_08312021.xlsx?d=w271bc32d7f264735a2aaa6081cc47945&csf=1&web=1&e=qIyo11\n",
+            target="_blank",
+            style={"color": "blue", "textDecoration": "underline"}
+            ),
+        html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
+        html.Br(),
+        html.Small("Business owners and points of contact: John Xu\u00A0\u00A0\u00A0"),
+        html.A(
+            "jianhang.xu@va.gov",
+            href="mailto:jianhang.xu@va.gov", 
+            style={"color": "blue", "textDecoration": "underline"}
+            ),
+        html.Small("\u00A0\u00A0\u00A0 Andrea Brian \u00A0\u00A0\u00A0"),
+        html.A(
+            "andrea.brian@va.gov",
+            href="mailto:andrea.brian@va.gov", 
+            style={"color": "blue", "textDecoration": "underline"}
+            ),
+        html.Small("\u00A0\u00A0\u00A0 Natalie Cole \u00A0\u00A0\u00A0"),
+        html.A(
+            "natalie.cole2@va.gov",
+            href="mailto:natalie.cole2@va.gov", 
+            style={"color": "blue", "textDecoration": "underline"}
+            ),
         html.P("Provide observed monthly claims and monthly trend options (% per month)"),
         html.Div(
             style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "12px"},
@@ -80,11 +124,11 @@ dash_app.layout = html.Div(
         html.Div(
             style={"display": "flex", "gap": "24px", "flexWrap": "wrap"},
             children=[
-                html.Div([html.H4("Mean Annual Total"), html.Div(id="mean-total", style={"fontSize": "26px"})]),
-                html.Div([html.H4("Median Annual Total"), html.Div(id="median-total", style={"fontSize": "26px"})]),
-                html.Div([html.H4("5th_95th Percentile"), html.Div(id="ci-total", style={"fontSize": "26px"})]),
-                html.Div([html.H4("Observed Months"), html.Div(id="obs-months", style={"fontSize": "26px"})]),
-                html.Div([html.H4("$50B Percentile"), html.Div(id="50b-percentile", style={"fontSize": "26px"})]),
+                html.Div([html.H4("Mean Annual Total", title="Average of all annual totals"), html.Div(id="mean-total", style={"fontSize": "26px"})]),
+                html.Div([html.H4("Median Annual Total", title="Middle value of all annual totals"), html.Div(id="median-total", style={"fontSize": "26px"})]),
+                html.Div([html.H4("5th_95th Percentile", title="Range between the 5th and 95th percentile"), html.Div(id="ci-total", style={"fontSize": "26px"})]),
+                html.Div([html.H4("Observed Months", title="Number of months with recorded data"), html.Div(id="obs-months", style={"fontSize": "26px"})]),
+                html.Div([html.H4("$50B Percentile", title="Percentile corresponding to $50 billion threshold"), html.Div(id="50b-percentile", style={"fontSize": "26px"})]),
             ],
         ),
         dcc.Graph(id="timeseries-graph", style={"height": "48vh"}),
