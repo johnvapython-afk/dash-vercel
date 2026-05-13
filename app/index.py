@@ -10,7 +10,7 @@ import plotly.graph_objs as go
 import pandas as pd
 #import scipy.stats as scista
 
-DEFAULT_CLAIMS = "3940, 3528, 3904, 3944, 3714, 3916"
+DEFAULT_CLAIMS = "3956, 3556, 3913, 3998, 3895, 4133"
 DEFAULT_TRENDS = "0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7"
 DEFAULT_VOLATILITY = 9
 DEFAULT_SIMS = 1000
@@ -28,7 +28,7 @@ dash_app.layout = html.Div(
         html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
         html.Small("Intended Use: Project future monthly community care claims and fiscal year claims"),
         html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
-        html.Small("Last update date: May 1, 2026"),
+        html.Small("Last update date: May 13, 2026"),
         html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
         html.Small("The current frequency of update: Monthly"),
         html.Small("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"),  # 7 spaces
@@ -155,9 +155,9 @@ def parse_number_list(text: str):
 )		
 def update_outputIncPaid(selected_button):		
     if (selected_button=='1'):
-        return "3940, 3528, 3904, 3944, 3714, 3916"
+        return "3956, 3556, 3913, 3998, 3895, 4133"
     if (selected_button=='2'):
-        return "3840, 2749, 3955, 3445, 3570, 4023"
+        return "4090, 3012, 4239, 3701, 3896, 4295"
 
 
 @dash_app.callback(
