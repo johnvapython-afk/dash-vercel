@@ -56,16 +56,16 @@ dash_app.layout = html.Div(
             href="mailto:jianhang.xu@va.gov", 
             style={"color": "blue", "textDecoration": "underline"}
             ),
-        html.Small("\u00A0\u00A0\u00A0 Andrea Brian \u00A0\u00A0\u00A0"),
+        html.Small("\u00A0\u00A0\u00A0 Michael Moore \u00A0\u00A0\u00A0"),
         html.A(
-            "andrea.brian@va.gov",
-            href="mailto:andrea.brian@va.gov", 
+            "michael.moore10@va.gov",
+            href="mailto:Michael.Moore10@va.gov", 
             style={"color": "blue", "textDecoration": "underline"}
             ),
-        html.Small("\u00A0\u00A0\u00A0 Natalie Cole \u00A0\u00A0\u00A0"),
+        html.Small("\u00A0\u00A0\u00A0 Don Fowler \u00A0\u00A0\u00A0"),
         html.A(
-            "natalie.cole2@va.gov",
-            href="mailto:natalie.cole2@va.gov", 
+            "don.fowler@va.gov",
+            href="mailto:Don.Fowler@va.gov", 
             style={"color": "blue", "textDecoration": "underline"}
             ),
         html.P("Provide observed monthly claims and monthly trend options (% per month)"),
